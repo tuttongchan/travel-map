@@ -30,8 +30,7 @@ const Register = ({ setShowRegister }) => {
   return (
     <div className="registerContainer">
       <div className="logo">
-        <Room />
-        LamaPin
+        SIGNUP
       </div>
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="username..." ref={nameRef} />

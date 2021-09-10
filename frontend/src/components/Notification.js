@@ -25,12 +25,12 @@ const Notification = () => {
       ref={notificationRef}
     >
       <div className="exclamation-container">
-        <i class="fas fa-exclamation"></i>
+        <i className="fas fa-exclamation"></i>
       </div>
       <div className="right-notification">
         <p>Double click to add a pin.</p>
         <div className="exit-container" onClick={closePopup}>
-          <i class="fas fa-times"></i>
+          <i className="fas fa-times"></i>
         </div>
       </div>
     </div>

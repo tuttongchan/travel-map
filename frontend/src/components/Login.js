@@ -28,13 +28,20 @@ const Login = ({ setShowLogin, myStorage, setCurrentUsername }) => {
 
   return (
     <div className="loginContainer">
-      <div className="logo">
-        <Room />
-        LamaPin
-      </div>
+      <div className="logo">LOGIN</div>
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="username..." ref={usernameRef} />
-        <input type="password" placeholder="password..." ref={passwordRef} />
+        <input
+          type="text"
+          className="popup-input"
+          placeholder="username..."
+          ref={usernameRef}
+        />
+        <input
+          type="password"
+          className="popup-input"
+          placeholder="password..."
+          ref={passwordRef}
+        />
         <button className="loginBtn" type="submit">
           Login
         </button>

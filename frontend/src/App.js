@@ -3,10 +3,12 @@ import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import { Room, Star } from '@material-ui/icons';
 import './app.css';
 import axios from 'axios';
+import Modal from 'react-modal';
 import { format } from 'timeago.js';
 import Register from './components/Register';
 import Login from './components/Login';
 import Notification from './components/Notification';
+import ListItem from './components/ListItem';
 
 function App() {
   const myStorage = window.localStorage;
@@ -21,13 +23,36 @@ function App() {
   const [rating, setRating] = useState(0);
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [viewport, setViewport] = useState({
     width: '100vw',
     height: '100vh',
-    latitude: 48.858093,
-    longitude: 2.294694,
+    latitude: 34.0489,
+    longitude: -111.0937,
     zoom: 4,
   });
+
+  // Modal Styles
+  const customStyles = {
+    content: {
+      width: '16rem',
+      height: '16rem',
+      padding: '1.5rem 3rem',
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      overflow: 'hidden',
+      borderRadius: '20px',
+      overflowY: 'scroll',
+    },
+    modalHeading: {
+      textAlign: 'center',
+    },
+  };
 
   useEffect(() => {
     const getPins = async () => {
@@ -76,12 +101,14 @@ function App() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/pins/${id}`);
-      setPins(
-        pins.filter((pin) => {
-          return pin._id !== id;
-        })
-      );
+      if (currentUsername) {
+        await axios.delete(`/pins/${id}`);
+        setPins(
+          pins.filter((pin) => {
+            return pin._id !== id;
+          })
+        );
+      }
     } catch (err) {
       console.log(err);
     }
@@ -102,7 +129,7 @@ function App() {
         transitionDuration="200"
         width="100%"
         height="100%"
-        // onDblClick={currentUsername && handleAddClick}
+        mapStyle="mapbox://styles/tuttongchan/cksy4dn0m44z918pein6miohk"
       >
         <Notification />
         {pins.map((p) => (
@@ -116,6 +143,7 @@ function App() {
             >
               {/* --- Material UI Marker --- */}
               <Room
+                key={p._id}
                 style={{
                   fontSize: viewport.zoom * 7,
                   color:
@@ -176,6 +204,7 @@ function App() {
                 <label>Title</label>
                 <input
                   placeholder="Enter a title"
+                  className="popup-input"
                   onChange={(e) => setTitle(e.target.value)}
                 />
                 <label>Description</label>
@@ -199,22 +228,75 @@ function App() {
           </Popup>
         )}
         {currentUsername ? (
-          <button className="button logout" onClick={handleLogout}>
-            Log out
-          </button>
+          <>
+            <div className="buttons">
+              <button
+                className="button all-pins"
+                onClick={() => setModalIsOpen(true)}
+              >
+                All Pins
+              </button>
+              <button className="button logout" onClick={handleLogout}>
+                Log out
+              </button>
+            </div>
+          </>
         ) : (
           <div className="buttons">
-            <button className="button login" onClick={() => setShowLogin(true)}>
+            <button className="button login">Guest</button>
+            <button
+              className="button login"
+              onClick={() => {
+                setShowLogin(true);
+                setShowRegister(false);
+              }}
+            >
               Login
             </button>
             <button
               className="button register"
-              onClick={() => setShowRegister(true)}
+              onClick={() => {
+                setShowRegister(true);
+                setShowLogin(false);
+              }}
             >
               Register
             </button>
           </div>
         )}
+        {modalIsOpen ? (
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={() => setModalIsOpen(false)}
+            contentLabel="Signout Modal"
+            style={customStyles}
+          >
+            <div className="modal-container">
+              <div className="top-modal-container">
+                <div className="all-pins-logo">ALL PINS</div>
+                <input
+                  className="modal-input"
+                  type="text"
+                  placeholder="Search Place..."
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              {pins
+                .filter((pin) => {
+                  if (searchTerm === '') {
+                    return pin;
+                  } else if (
+                    pin.title.toLowerCase().includes(searchTerm.toLowerCase())
+                  ) {
+                    return pin;
+                  }
+                })
+                .map((pin, i) => (
+                  <ListItem key={pin.id} pin={pin} pins={pins} i={i} />
+                ))}
+            </div>
+          </Modal>
+        ) : null}
         {showRegister && <Register setShowRegister={setShowRegister} />}
         {showLogin && (
           <Login
