@@ -19,9 +19,26 @@ router.post('/register', async (req, res) => {
     // Save user and send response
     const user = await newUser.save();
 
-    // Can also use this below
+    // --- Can also use this below ---
     // res.status(200).json(user);
     res.status(200).json(user._id);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// GUEST
+router.post('/guest', async (req, res) => {
+  try {
+    const newUser = new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+    });
+
+    const user = await newUser.save();
+    // Send response
+    res.status(200).json(user);
   } catch (err) {
     res.status(500).json(err);
   }

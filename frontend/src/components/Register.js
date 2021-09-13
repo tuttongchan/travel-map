@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import './register.css';
-import { Cancel, Room } from '@material-ui/icons';
+import { Cancel } from '@material-ui/icons';
 import axios from 'axios';
 
 const Register = ({ setShowRegister }) => {
@@ -29,14 +29,27 @@ const Register = ({ setShowRegister }) => {
 
   return (
     <div className="registerContainer">
-      <div className="logo">
-        SIGNUP
-      </div>
+      <div className="register-logo">SIGNUP</div>
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="username..." ref={nameRef} />
-        <input type="email" placeholder="email..." ref={emailRef} />
-        <input type="password" placeholder="password..." ref={passwordRef} />
-        <button>Register</button>
+        <input
+          type="text"
+          placeholder="username..."
+          className="popup-input"
+          ref={nameRef}
+        />
+        <input
+          type="email"
+          placeholder="email..."
+          className="popup-input"
+          ref={emailRef}
+        />
+        <input
+          type="password"
+          placeholder="password..."
+          className="popup-input"
+          ref={passwordRef}
+        />
+        <button className="registerBtn">Register</button>
         {success && (
           <span className="success">Successful. You can login now!</span>
         )}

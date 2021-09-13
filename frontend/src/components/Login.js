@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import './login.css';
-import { Cancel, Room } from '@material-ui/icons';
+import { Cancel } from '@material-ui/icons';
+import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 
 const Login = ({ setShowLogin, myStorage, setCurrentUsername }) => {
@@ -28,7 +29,7 @@ const Login = ({ setShowLogin, myStorage, setCurrentUsername }) => {
 
   return (
     <div className="loginContainer">
-      <div className="logo">LOGIN</div>
+      <div className="login-logo">LOGIN</div>
       <form onSubmit={handleSubmit}>
         <input
           type="text"

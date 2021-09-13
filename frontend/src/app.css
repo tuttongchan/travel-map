@@ -68,7 +68,15 @@ textarea {
   border-radius: 5px;
   color: white;
   background-color: tomato;
+  border: 1px solid tomato;
   cursor: pointer;
+  transition: all 0.3s;
+}
+
+.submitButton:hover {
+  background-color: #fff;
+  color: tomato;
+  border: 1px solid tomato;
 }
 
 .buttons {
@@ -124,6 +132,7 @@ textarea {
 .delete-button {
   background-color: red;
   border: 1px solid red;
+  margin-bottom: 0.6rem;
   transition: all 0.3s;
 }
 
@@ -132,6 +141,16 @@ textarea {
   border: 1px solid red;
   color: red;
 }
+
+.delete-post-container {
+  text-align: center;
+}
+
+.delete-post-span {
+  color: #ff0000;
+  font-size: .8rem;
+}
+
 
 .logout {
   background-color: tomato;
@@ -142,13 +161,18 @@ textarea {
   background-color: cornflowerblue;
 }
 
+.guest {
+  background-color: #ff62a9;
+  margin-right: 10px;
+}
+
 .login {
-  background-color: teal;
+  background-color: #ff6562;
   margin-right: 10px;
 }
 
 .register {
-  background-color: slateblue;
+  background-color: #ff62f7;
 }
 
 /* --- Modal Container --- */

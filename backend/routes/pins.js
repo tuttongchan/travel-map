@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const mongoose = require('mongoose');
 const Pin = require('../models/Pin');
-const User = require('../models/User');
 
 // create a pin
 router.post('/', async (req, res) => {
@@ -27,10 +26,7 @@ router.get('/', async (req, res) => {
 // delete a pin
 router.delete('/:id', async (req, res) => {
   try {
-    // const username = new User(req.body.username)
-    // const userId = req.params.id;
-
-    await Pin.findByIdAndRemove(userId);
+    await Pin.findByIdAndRemove(req.params.id);
     res.json({ message: 'Post deleted successfully!' });
   } catch (err) {
     res.json(500).json(err);

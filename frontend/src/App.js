@@ -15,6 +15,9 @@ function App() {
   const [currentUsername, setCurrentUsername] = useState(
     myStorage.getItem('user')
   );
+  const [pinUsername, setPinUsername] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
+  // -----------------------------------------------------
   const [pins, setPins] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [newPlace, setNewPlace] = useState(null);
@@ -25,6 +28,7 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [deleteError, setDeleteError] = useState(false);
   const [viewport, setViewport] = useState({
     width: '100vw',
     height: '100vh',
@@ -66,10 +70,14 @@ function App() {
     getPins();
   }, []);
 
-  const handleMarkerClick = (id, lat, long) => {
+  const handleMarkerClick = (id, lat, long, username) => {
     setCurrentPlaceId(id);
+    console.log(currentPlaceId);
+    setPinUsername(username);
+    console.log(pinUsername);
     setViewport({ ...viewport, latitude: lat, longitude: long });
   };
+  // console.log(currentPlaceId);
 
   const handleAddClick = (e) => {
     const [long, lat] = e.lngLat;
@@ -92,7 +100,9 @@ function App() {
 
     try {
       const res = await axios.post('/pins', newPin);
+      console.log(res.data);
       setPins([...pins, res.data]);
+      console.log(pins);
       setNewPlace(null);
     } catch (err) {
       console.log(err);
@@ -101,14 +111,33 @@ function App() {
 
   const handleDelete = async (id) => {
     try {
-      if (currentUsername) {
+      if (currentUsername === pinUsername) {
         await axios.delete(`/pins/${id}`);
         setPins(
           pins.filter((pin) => {
             return pin._id !== id;
           })
         );
+      } else {
+        setDeleteError(true);
+        setTimeout(() => setDeleteError(false), 2500);
       }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleGuest = async (e) => {
+    e.preventDefault();
+    const user = {
+      username: 'Guest',
+      password: 'guest123',
+    };
+    try {
+      const res = await axios.post('/users/login', user);
+      console.log(res.data);
+      setCurrentUsername(res.data.username);
+      myStorage.setItem('user', res.data.username);
     } catch (err) {
       console.log(err);
     }
@@ -135,7 +164,6 @@ function App() {
         {pins.map((p) => (
           <>
             <Marker
-              key={p._id}
               latitude={p.lat}
               longitude={p.long}
               offsetLeft={-viewport.zoom * 3.5}
@@ -143,7 +171,6 @@ function App() {
             >
               {/* --- Material UI Marker --- */}
               <Room
-                key={p._id}
                 style={{
                   fontSize: viewport.zoom * 7,
                   color:
@@ -151,7 +178,9 @@ function App() {
                   cursor: 'pointer',
                   zIndex: '100',
                 }}
-                onClick={() => handleMarkerClick(p._id, p.lat, p.long)}
+                onClick={() =>
+                  handleMarkerClick(p._id, p.lat, p.long, p.username)
+                }
               />
             </Marker>
             {p._id === currentPlaceId && (
@@ -185,6 +214,13 @@ function App() {
                   >
                     Delete Post
                   </button>
+                  <div className="delete-post-container">
+                    {deleteError === true ? (
+                      <span className="delete-post-span">
+                        Not allowed to delete this pin!
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
               </Popup>
             )}
@@ -203,13 +239,13 @@ function App() {
               <form onSubmit={handleSubmit}>
                 <label>Title</label>
                 <input
-                  placeholder="Enter a title"
+                  placeholder="Enter a title..."
                   className="popup-input"
                   onChange={(e) => setTitle(e.target.value)}
                 />
                 <label>Description</label>
                 <textarea
-                  placeholder="Say us something about this place."
+                  placeholder="Say something about this place..."
                   onChange={(e) => setDesc(e.target.value)}
                 />
                 <label>Rating</label>
@@ -243,7 +279,9 @@ function App() {
           </>
         ) : (
           <div className="buttons">
-            <button className="button login">Guest</button>
+            <button className="button guest" onClick={handleGuest}>
+              Guest
+            </button>
             <button
               className="button login"
               onClick={() => {
