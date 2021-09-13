@@ -44,3 +44,10 @@
 .hide {
   display: none;
 }
+
+/* --- Media Query --- */
+@media screen and (max-width: 600px) {
+  .notification-container {
+    display: none;
+  }
+}

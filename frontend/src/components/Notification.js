@@ -28,7 +28,7 @@ const Notification = () => {
         <i className="fas fa-exclamation"></i>
       </div>
       <div className="right-notification">
-        <p>Double click to add a pin.</p>
+        <p>Login and double click to add a pin.</p>
         <div className="exit-container" onClick={closePopup}>
           <i className="fas fa-times"></i>
         </div>

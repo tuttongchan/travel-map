@@ -16,8 +16,6 @@ function App() {
     myStorage.getItem('user')
   );
   const [pinUsername, setPinUsername] = useState(null);
-  const [currentUserId, setCurrentUserId] = useState(null);
-  // -----------------------------------------------------
   const [pins, setPins] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [newPlace, setNewPlace] = useState(null);
@@ -77,7 +75,6 @@ function App() {
     console.log(pinUsername);
     setViewport({ ...viewport, latitude: lat, longitude: long });
   };
-  // console.log(currentPlaceId);
 
   const handleAddClick = (e) => {
     const [long, lat] = e.lngLat;
@@ -164,6 +161,7 @@ function App() {
         {pins.map((p) => (
           <>
             <Marker
+              key={p._id}
               latitude={p.lat}
               longitude={p.long}
               offsetLeft={-viewport.zoom * 3.5}
@@ -330,7 +328,7 @@ function App() {
                   }
                 })
                 .map((pin, i) => (
-                  <ListItem key={pin.id} pin={pin} pins={pins} i={i} />
+                  <ListItem key={pin._id} pin={pin} pins={pins} i={i} />
                 ))}
             </div>
           </Modal>
