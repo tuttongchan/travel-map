@@ -59,7 +59,7 @@ function App() {
   useEffect(() => {
     const getPins = async () => {
       try {
-        const res = await axios.get('/pins');
+        const res = await axios.get('https://tutmaptrack.herokuapp.com//pins');
         setPins(res.data);
       } catch (err) {
         console.log(err);
@@ -96,7 +96,7 @@ function App() {
     };
 
     try {
-      const res = await axios.post('/pins', newPin);
+      const res = await axios.post('https://tutmaptrack.herokuapp.com/pins', newPin);
       console.log(res.data);
       setPins([...pins, res.data]);
       console.log(pins);
@@ -109,7 +109,7 @@ function App() {
   const handleDelete = async (id) => {
     try {
       if (currentUsername === pinUsername) {
-        await axios.delete(`/pins/${id}`);
+        await axios.delete(`https://tutmaptrack.herokuapp.com/pins/${id}`);
         setPins(
           pins.filter((pin) => {
             return pin._id !== id;
@@ -131,7 +131,7 @@ function App() {
       password: 'guest123',
     };
     try {
-      const res = await axios.post('/users/login', user);
+      const res = await axios.post('https://tutmaptrack.herokuapp.com/users/login', user);
       console.log(res.data);
       setCurrentUsername(res.data.username);
       myStorage.setItem('user', res.data.username);
