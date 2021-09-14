@@ -16,7 +16,7 @@ const Login = ({ setShowLogin, myStorage, setCurrentUsername }) => {
     };
 
     try {
-      const res = await axios.post('https://tutmaptrack.herokuapp.com/users/login', user);
+      const res = await axios.post('/users/login', user);
       console.log(res.data);
       setCurrentUsername(res.data.username);
       myStorage.setItem('user', res.data.username);

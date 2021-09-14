@@ -19,7 +19,7 @@ const Register = ({ setShowRegister }) => {
     };
 
     try {
-      await axios.post('https://tutmaptrack.herokuapp.com/users/register', newUser);
+      await axios.post('/users/register', newUser);
       setError(false);
       setSuccess(true);
     } catch (err) {
