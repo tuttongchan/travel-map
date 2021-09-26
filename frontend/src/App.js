@@ -69,6 +69,7 @@ function App() {
     };
     getPins();
   }, []);
+  console.log(pins);
 
   const handleMarkerClick = (id, lat, long, username) => {
     setCurrentPlaceId(id);
